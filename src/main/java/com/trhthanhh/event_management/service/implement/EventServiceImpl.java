@@ -13,6 +13,7 @@ import com.trhthanhh.event_management.repository.CategoryRepository;
 import com.trhthanhh.event_management.repository.EventRepository;
 import com.trhthanhh.event_management.service.EventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,12 +21,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
+    private final CloudinaryService cloudinaryService;
+
+    @Value("${resource.noImageUrl}")
+    private String noImageUrl;
 
     @Override
     public EventResDto createEvent(EventReqDto eventReqDto) {
@@ -41,11 +47,18 @@ public class EventServiceImpl implements EventService {
                 .location(eventReqDto.getLocation())
                 .organizer(eventReqDto.getOrganizer())
                 .status(eventReqDto.getStatus())
-                .thumbnail(eventReqDto.getThumbnail())
                 .category(existingCategory)
                 .startDate(eventReqDto.getStartDate())
                 .endDate(eventReqDto.getEndDate())
                 .build();
+        // Xử lý file hình ảnh
+        String thumbnail = noImageUrl;
+        // Nếu tồn tại file thì upload lên Cloudinary
+        if (eventReqDto.getFileImage() != null && !eventReqDto.getFileImage().isEmpty()) {
+            Map<?, ?> data = this.cloudinaryService.upload(eventReqDto.getFileImage());
+            thumbnail = (String) data.get("secure_url");
+        }
+        event.setThumbnail(thumbnail);
         return new EventDtoMapper().apply(eventRepository.save(event));
     }
 
@@ -78,12 +91,18 @@ public class EventServiceImpl implements EventService {
         existingEvent.setLocation(eventReqDto.getLocation());
         existingEvent.setOrganizer(existingEvent.getOrganizer());
         existingEvent.setStatus(eventReqDto.getStatus());
-        existingEvent.setThumbnail(existingEvent.getThumbnail());
         existingEvent.setQuantity(existingEvent.getQuantity());
         existingEvent.setImportant(existingEvent.isImportant());
         existingEvent.setCategory(existingCategory);
         existingEvent.setStartDate(eventReqDto.getStartDate());
         existingEvent.setEndDate(eventReqDto.getEndDate());
+        // Xử lý file hình ảnh
+        existingEvent.setThumbnail(existingEvent.getThumbnail());
+        if (eventReqDto.getFileImage() != null && !eventReqDto.getFileImage().isEmpty()) {
+            Map<?, ?> data = this.cloudinaryService.upload(eventReqDto.getFileImage());
+            String newThumbnail = (String) data.get("secure_url");
+            existingEvent.setThumbnail(newThumbnail);
+        }
         eventRepository.save(existingEvent);
         return new EventDtoMapper().apply(existingEvent);
     }

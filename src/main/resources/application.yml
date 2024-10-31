@@ -23,3 +23,8 @@ api:
   prefix: api/v1
 resource:
   suitableQuantity: 300
+  noImageUrl: https://res.cloudinary.com/dcw5wq1ka/image/upload/v1729736990/no-image-found.png
+cloudinary:
+  cloud_name: dcw5wq1ka
+  api_key: 228462159873377
+  api_secret: VOz0qy1Fh1TwwdqF5ZXjpytRVjY

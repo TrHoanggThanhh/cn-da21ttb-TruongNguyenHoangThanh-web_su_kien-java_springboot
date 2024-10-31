@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ import java.time.LocalDateTime;
 public class EventController {
     private final EventService eventService;
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public DataResponse<EventResDto> createEvent(@Valid EventReqDto eventReqDto) {
         final EventResDto event = eventService.createEvent(eventReqDto);
         return new DataResponse<>(HttpStatus.OK.value(), "Create event successfully", event);
