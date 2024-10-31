@@ -38,11 +38,12 @@ public class EventController {
     public DataResponse<PageDto<EventResDto>> searchEvents(
             @RequestParam(name = "keyword", required = false) String keyword,
             @RequestParam(name = "status", required = false) EventStatus status,
+            @RequestParam(name = "categoryId", required = false) String categoryId,
             @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss") @RequestParam(name = "startDate", required = false) LocalDateTime startDate,
             @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss") @RequestParam(name = "endDate", required = false) LocalDateTime endDate,
             @RequestParam(name = "pageNumber", required = false, defaultValue = "1") Integer pageNumber,
             @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
-        final PageDto<EventResDto> eventDtoPageSearch = eventService.searchEvents(keyword, status, startDate, endDate, pageNumber, pageSize);
+        final PageDto<EventResDto> eventDtoPageSearch = eventService.searchEvents(keyword, status, categoryId, startDate, endDate, pageNumber, pageSize);
         return new DataResponse<>(HttpStatus.OK.value(), "Search events successfully", eventDtoPageSearch);
     }
 

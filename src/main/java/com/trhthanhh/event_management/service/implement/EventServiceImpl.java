@@ -103,10 +103,10 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public PageDto<EventResDto> searchEvents(String keyword, EventStatus status, LocalDateTime startDate, LocalDateTime endDate, int pageNumber, int pageSize) {
+    public PageDto<EventResDto> searchEvents(String keyword, EventStatus status, String categoryId, LocalDateTime startDate, LocalDateTime endDate, int pageNumber, int pageSize) {
         pageNumber--;
         final Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        final Page<Event> eventPageSearch = eventRepository.searchEvents(keyword, status, startDate, endDate, pageable);
+        final Page<Event> eventPageSearch = eventRepository.searchEvents(keyword, status, categoryId, startDate, endDate, pageable);
         return PageDto.of(eventPageSearch).map(new EventDtoMapper());
     }
 }

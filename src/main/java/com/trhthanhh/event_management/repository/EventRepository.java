@@ -19,14 +19,14 @@ public interface EventRepository extends JpaRepository<Event, String> {
     Page<Event> findAll(Pageable pageable);
 
     @Query("SELECT e FROM Event e WHERE " +
-            "(:keyword IS NULL OR :keyword = '' OR e.name LIKE %:keyword%) " +
-            "AND (:keyword IS NULL OR :keyword = '' OR e.location LIKE %:keyword%) " +
-            "AND (:keyword IS NULL OR :keyword = '' OR e.organizer LIKE %:keyword%) " +
+            "(:keyword IS NULL OR :keyword = '' OR e.name LIKE %:keyword% OR e.location LIKE %:keyword% OR e.organizer LIKE %:keyword%) " +
             "AND (:status IS NULL OR e.status = :status) " +
+            "AND (:categoryId IS NULL OR e.category.id = :categoryId) " +
             "AND (:startDate IS NULL OR e.startDate >= :startDate) " +
             "AND (:endDate IS NULL OR e.endDate <= :endDate)")
     Page<Event> searchEvents(@Param("keyword") String keyword,
                              @Param("status") EventStatus status,
+                             @Param("categoryId") String categoryId,
                              @Param("startDate") LocalDateTime startDate,
                              @Param("endDate") LocalDateTime endDate,
                              Pageable pageable);

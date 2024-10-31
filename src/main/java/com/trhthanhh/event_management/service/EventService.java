@@ -13,5 +13,5 @@ public interface EventService {
     PageDto<EventResDto> getAllEvents(int pageNumber, int pageSize);
     EventResDto updateEvent(String id, EventReqDto eventReqDto);
     void deleteEventById(String id);
-    PageDto<EventResDto> searchEvents(String keyword, EventStatus status, LocalDateTime startDate, LocalDateTime endDate, int pageNumber, int pageSize);
+    PageDto<EventResDto> searchEvents(String keyword, EventStatus status, String categoryId, LocalDateTime startDate, LocalDateTime endDate, int pageNumber, int pageSize);
 }
