@@ -20,6 +20,8 @@ public class EventDtoMapper implements Function<Event, EventResDto> {
                 .status(event.getStatus())
                 .thumbnail(event.getThumbnail())
                 .categoryName(event.getCategory().getName())
+                .quantity(event.getQuantity())
+                .isImportant(event.isImportant())
                 .startDate(event.getStartDate())
                 .endDate(event.getEndDate())
                 .build();

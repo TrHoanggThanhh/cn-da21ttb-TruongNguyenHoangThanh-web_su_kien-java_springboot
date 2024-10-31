@@ -13,6 +13,7 @@ import com.trhthanhh.event_management.repository.CategoryRepository;
 import com.trhthanhh.event_management.repository.EventRepository;
 import com.trhthanhh.event_management.service.EventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,9 @@ import java.time.LocalDateTime;
 public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
+
+    @Value("${resource.suitableQuantity}")
+    private int suitableQuantity;
 
     @Override
     public EventResDto createEvent(EventReqDto eventReqDto) {
@@ -43,6 +47,8 @@ public class EventServiceImpl implements EventService {
                 .status(eventReqDto.getStatus())
                 .thumbnail(eventReqDto.getThumbnail())
                 .category(existingCategory)
+                .quantity(eventReqDto.getQuantity())
+                .isImportant(eventReqDto.getQuantity() >= suitableQuantity)
                 .startDate(eventReqDto.getStartDate())
                 .endDate(eventReqDto.getEndDate())
                 .build();
@@ -79,6 +85,8 @@ public class EventServiceImpl implements EventService {
         existingEvent.setOrganizer(existingEvent.getOrganizer());
         existingEvent.setStatus(eventReqDto.getStatus());
         existingEvent.setThumbnail(existingEvent.getThumbnail());
+        existingEvent.setQuantity(eventReqDto.getQuantity());
+        existingEvent.setImportant(eventReqDto.getQuantity() >= suitableQuantity);
         existingEvent.setCategory(existingCategory);
         existingEvent.setStartDate(eventReqDto.getStartDate());
         existingEvent.setEndDate(eventReqDto.getEndDate());

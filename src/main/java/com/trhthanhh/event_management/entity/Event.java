@@ -2,10 +2,7 @@ package com.trhthanhh.event_management.entity;
 
 import com.trhthanhh.event_management.enums.EventStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -45,6 +42,12 @@ public class Event extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @Column(name = "quantity")
+    private int quantity;
+
+    @Column(name = "is_important")
+    private boolean isImportant;
 
     @Column(name = "start_date")
     private LocalDateTime startDate;

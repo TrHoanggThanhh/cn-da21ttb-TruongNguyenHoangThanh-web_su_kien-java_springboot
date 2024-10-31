@@ -47,7 +47,7 @@ public class EventController {
     }
 
     @GetMapping("find")
-    public DataResponse<EventResDto> getEventByCode(@RequestParam("id") String id) {
+    public DataResponse<EventResDto> getEventById(@RequestParam("id") String id) {
         final EventResDto event = eventService.getEventById(id);
         return new DataResponse<>(HttpStatus.OK.value(), "Get event with id " + id + " successfully", event);
     }
