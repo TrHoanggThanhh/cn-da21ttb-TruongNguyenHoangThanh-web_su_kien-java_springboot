@@ -28,3 +28,6 @@ cloudinary:
   cloud_name: dcw5wq1ka
   api_key: 228462159873377
   api_secret: VOz0qy1Fh1TwwdqF5ZXjpytRVjY
+jwt:
+  expiration: 36000 #10hours = 10* 60 * 60
+  secretKey: Z7hjrPTXlc9XLzJCO7kyYZWh1DiskWLbplYzgBHIREU=
