@@ -44,10 +44,10 @@ public class Event extends BaseEntity {
     private Category category;
 
     @Column(name = "quantity")
-    private int quantity;
+    private int quantity = 0;
 
     @Column(name = "is_important")
-    private boolean isImportant;
+    private boolean isImportant = false;
 
     @Column(name = "start_date")
     private LocalDateTime startDate;
