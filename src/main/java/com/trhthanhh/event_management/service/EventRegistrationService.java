@@ -9,6 +9,6 @@ public interface EventRegistrationService {
     EventRegistrationResDto createEventRegistration(EventRegistrationReqDto eventRegistrationReqDto);
     EventRegistrationResDto getEventRegistrationById(String id);
     EventResDto getEventByEventRegistrationId(String eventRegistrationId);
-    PageDto<EventRegistrationResDto> getEventRegistrationsByCurrentUser(String username, Integer pageNumber, Integer pageSize);
+    PageDto<EventRegistrationResDto> getEventRegistrationsByCurrentUser(Integer pageNumber, Integer pageSize);
     void deleteEventRegistration(String id);
 }

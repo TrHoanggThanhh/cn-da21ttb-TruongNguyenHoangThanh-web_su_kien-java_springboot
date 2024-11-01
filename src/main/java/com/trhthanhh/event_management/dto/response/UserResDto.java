@@ -11,4 +11,5 @@ public class UserResDto {
     private String studentCode;
     private String fullName;
     private String role;
+    private boolean isVerified;
 }

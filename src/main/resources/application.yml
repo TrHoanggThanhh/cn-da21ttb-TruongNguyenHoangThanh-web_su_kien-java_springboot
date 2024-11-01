@@ -19,11 +19,23 @@ spring:
     time-zone: Asia/Ho_Chi_Minh
   application:
     timezone: Asia/Ho_Chi_Minh
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: "hoanggthanhh9988@gmail.com"
+    password: "vsgpwbfodmvcxncz"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 api:
   prefix: api/v1
 resource:
   suitableQuantity: 300
   noImageUrl: https://res.cloudinary.com/dcw5wq1ka/image/upload/v1729736990/no-image-found.png
+  logoImageUrl: https://upload.wikimedia.org/wikipedia/vi/c/ce/Logo_Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_Tr%C3%A0_Vinh.png
 cloudinary:
   cloud_name: dcw5wq1ka
   api_key: 228462159873377

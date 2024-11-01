@@ -20,12 +20,7 @@ public class UserController {
 
     @GetMapping("me")
     public DataResponse<UserResDto> getCurrentInformation() {
-        // Lấy thông tin của User từ SecurityContextHolder
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails principal = (UserDetails) authentication.getPrincipal();
-        String username = principal.getUsername();
-
-        final UserResDto userResDto = userService.getUserByEmail(username);
+        final UserResDto userResDto = userService.getCurrentUser();
         return new DataResponse<>(HttpStatus.OK.value(), "Get current information successfully", userResDto);
     }
 }

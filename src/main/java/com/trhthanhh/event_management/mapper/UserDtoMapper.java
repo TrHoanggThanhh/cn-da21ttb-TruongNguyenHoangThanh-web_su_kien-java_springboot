@@ -16,6 +16,7 @@ public class UserDtoMapper implements Function<User, UserResDto> {
                 .studentCode(user.getStudentCode())
                 .fullName(user.getLastName() + " " + user.getFirstName())
                 .role(user.getRole().getName())
+                .isVerified(user.isVerified())
                 .build();
     }
 }

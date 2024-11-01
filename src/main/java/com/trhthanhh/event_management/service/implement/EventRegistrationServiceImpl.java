@@ -20,6 +20,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,7 +72,12 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
     }
 
     @Override
-    public PageDto<EventRegistrationResDto> getEventRegistrationsByCurrentUser(String username, Integer pageNumber, Integer pageSize) {
+    public PageDto<EventRegistrationResDto> getEventRegistrationsByCurrentUser(Integer pageNumber, Integer pageSize) {
+        // Lấy thông tin của User từ SecurityContextHolder
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        String username = principal.getUsername();
+
         pageNumber--;
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         final Page<EventRegistration> eventRegistrationsPage = eventRegistrationRepository.findEventRegistrationByCurrentUser(username, pageable);
