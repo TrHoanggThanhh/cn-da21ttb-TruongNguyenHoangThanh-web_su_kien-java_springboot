@@ -43,3 +43,16 @@ cloudinary:
 jwt:
   expiration: 36000 #10hours = 10* 60 * 60
   secretKey: Z7hjrPTXlc9XLzJCO7kyYZWh1DiskWLbplYzgBHIREU=
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /api-docs.html
+open:
+  api:
+    title: API Documents
+    version: v1.0.0
+    description: APIs docs for Event Management website
+    serverUrl: http://localhost:8080/
+    serverDescription: local
+
