@@ -1,5 +1,6 @@
 package com.trhthanhh.event_management.service.implement;
 
+import com.trhthanhh.event_management.dto.PageDto;
 import com.trhthanhh.event_management.dto.request.EventRegistrationReqDto;
 import com.trhthanhh.event_management.dto.response.EventRegistrationResDto;
 import com.trhthanhh.event_management.dto.response.EventResDto;
@@ -16,10 +17,14 @@ import com.trhthanhh.event_management.repository.UserRepository;
 import com.trhthanhh.event_management.service.EventRegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -61,6 +66,14 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
         final Event existingEvent = eventRegistrationRepository.findEventByEventRegistrationId(eventRegistrationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find event with event registration id " + eventRegistrationId));
         return new EventDtoMapper().apply(existingEvent);
+    }
+
+    @Override
+    public PageDto<EventRegistrationResDto> getEventRegistrationsByCurrentUser(String username, Integer pageNumber, Integer pageSize) {
+        pageNumber--;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        final Page<EventRegistration> eventRegistrationsPage = eventRegistrationRepository.findEventRegistrationByCurrentUser(username, pageable);
+        return PageDto.of(eventRegistrationsPage).map(new EventRegistrationDtoMapper());
     }
 
     @Override

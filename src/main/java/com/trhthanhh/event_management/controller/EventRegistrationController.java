@@ -1,6 +1,7 @@
 package com.trhthanhh.event_management.controller;
 
 import com.trhthanhh.event_management.dto.DataResponse;
+import com.trhthanhh.event_management.dto.PageDto;
 import com.trhthanhh.event_management.dto.request.EventRegistrationReqDto;
 import com.trhthanhh.event_management.dto.response.EventRegistrationResDto;
 import com.trhthanhh.event_management.dto.response.EventResDto;
@@ -8,6 +9,9 @@ import com.trhthanhh.event_management.service.EventRegistrationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,6 +30,20 @@ public class EventRegistrationController {
     public DataResponse<EventRegistrationResDto> getEventRegistrationById(@RequestParam("id") String id) {
         final EventRegistrationResDto eventRegistration = eventRegistrationService.getEventRegistrationById(id);
         return new DataResponse<>(HttpStatus.OK.value(), "Get event registration with id " + id + " successfully", eventRegistration);
+    }
+
+    @GetMapping("me")
+    public DataResponse<PageDto<EventRegistrationResDto>> getEventRegistrationByCurrentUser(
+            @RequestParam(value = "pageNumber", required = false, defaultValue = "1") Integer pageNumber,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize
+    ) {
+        // Lấy thông tin của User từ SecurityContextHolder
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        String username = principal.getUsername();
+
+        final PageDto<EventRegistrationResDto> eventRegistrationDtoPage = eventRegistrationService.getEventRegistrationsByCurrentUser(username, pageNumber, pageSize);
+        return new DataResponse<>(HttpStatus.OK.value(), "Get event registration of current user " + username + " successfully", eventRegistrationDtoPage);
     }
 
     @GetMapping("event/{eventRegistrationId}")

@@ -46,12 +46,13 @@ public class WebSecurityConfig {
                 // Phân quyền
                 .authorizeHttpRequests(
                         request -> request
-                                .requestMatchers(
-                                        String.format("%s/auth/register", apiPrefix),
-                                        String.format("%s/auth/login", apiPrefix)
-                                ).permitAll()
-                                .requestMatchers(HttpMethod.POST, String.format("%s/events", apiPrefix)).hasAuthority(Role.ADMIN)
-                                .anyRequest().authenticated()
+//                                .requestMatchers(
+//                                        String.format("%s/auth/register", apiPrefix),
+//                                        String.format("%s/auth/login", apiPrefix),
+//                                        String.format("%s/users/me", apiPrefix)
+//                                ).permitAll()
+//                                .requestMatchers(HttpMethod.POST, String.format("%s/events", apiPrefix)).hasAuthority(Role.ADMIN)
+                                .anyRequest().permitAll()
                 )
                 // Cấu hình Session
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
