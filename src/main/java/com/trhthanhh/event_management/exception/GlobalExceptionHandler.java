@@ -45,6 +45,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage(), ZonedDateTime.now().toEpochSecond()));
     }
 
+    @ExceptionHandler(PermissionDenyException.class)
+    public ResponseEntity<ErrorResponse> handlePermissionDenyException(PermissionDenyException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage(), ZonedDateTime.now().toEpochSecond()));
+    }
+
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage(), ZonedDateTime.now().toEpochSecond()));

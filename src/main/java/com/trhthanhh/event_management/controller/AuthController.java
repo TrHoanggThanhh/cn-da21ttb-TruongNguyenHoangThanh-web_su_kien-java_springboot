@@ -2,7 +2,9 @@ package com.trhthanhh.event_management.controller;
 
 import com.trhthanhh.event_management.dto.DataResponse;
 import com.trhthanhh.event_management.dto.request.LoginReqDto;
+import com.trhthanhh.event_management.dto.request.RegisterReqDto;
 import com.trhthanhh.event_management.dto.response.LoginResDto;
+import com.trhthanhh.event_management.dto.response.UserResDto;
 import com.trhthanhh.event_management.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,13 @@ public class AuthController {
 
     @PostMapping("login")
     public DataResponse<LoginResDto> login(@Valid @RequestBody LoginReqDto loginReqDto) {
-        LoginResDto loginResDto = authService.login(loginReqDto);
+        final LoginResDto loginResDto = authService.login(loginReqDto);
         return new DataResponse<>(HttpStatus.OK.value(), "Login successfully", loginResDto);
+    }
+
+    @PostMapping("register")
+    public DataResponse<UserResDto> register(@Valid @RequestBody RegisterReqDto registerReqDto) {
+        final UserResDto userResDto = authService.register(registerReqDto);
+        return new DataResponse<>(HttpStatus.OK.value(), "Register successfully", userResDto);
     }
 }
