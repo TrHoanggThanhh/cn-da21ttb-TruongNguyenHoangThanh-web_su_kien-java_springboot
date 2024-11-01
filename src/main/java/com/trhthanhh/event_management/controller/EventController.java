@@ -6,6 +6,8 @@ import com.trhthanhh.event_management.dto.request.EventReqDto;
 import com.trhthanhh.event_management.dto.response.EventResDto;
 import com.trhthanhh.event_management.enums.EventStatus;
 import com.trhthanhh.event_management.service.EventService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,15 +20,18 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("${api.prefix}/events")
 @RequiredArgsConstructor
+@Tag(name = "Event controller")
 public class EventController {
     private final EventService eventService;
 
+    @Operation(summary = "Tạo sự kiện")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public DataResponse<EventResDto> createEvent(@Valid EventReqDto eventReqDto) {
         final EventResDto event = eventService.createEvent(eventReqDto);
         return new DataResponse<>(HttpStatus.OK.value(), "Create event successfully", event);
     }
 
+    @Operation(summary = "Tất cả sự kiện (phân trang)")
     @GetMapping
     public DataResponse<PageDto<EventResDto>> getAllEvents(
             @RequestParam(name = "pageNumber", required = false, defaultValue = "1") Integer pageNumber,
@@ -35,6 +40,7 @@ public class EventController {
         return new DataResponse<>(HttpStatus.OK.value(), "Get all events successfully", eventDtoPage);
     }
 
+    @Operation(summary = "Tìm kiếm sự sự kiện theo keyword, status, categoryId, startDate, endDate (phân trang)")
     @GetMapping("search")
     public DataResponse<PageDto<EventResDto>> searchEvents(
             @RequestParam(name = "keyword", required = false) String keyword,
@@ -48,18 +54,21 @@ public class EventController {
         return new DataResponse<>(HttpStatus.OK.value(), "Search events successfully", eventDtoPageSearch);
     }
 
+    @Operation(summary = "Tìm theo ID")
     @GetMapping("find")
     public DataResponse<EventResDto> getEventById(@RequestParam("id") String id) {
         final EventResDto event = eventService.getEventById(id);
         return new DataResponse<>(HttpStatus.OK.value(), "Get event with id " + id + " successfully", event);
     }
 
+    @Operation(summary = "Cập nhật sự kiện")
     @PutMapping("{id}")
     public DataResponse<EventResDto> updateEvent(@Valid @PathVariable("id") String id, @Valid EventReqDto eventReqDto) {
         eventService.updateEvent(id, eventReqDto);
         return new DataResponse<>(HttpStatus.ACCEPTED.value(), "Update event successfully");
     }
 
+    @Operation(summary = "Xóa sự kiện")
     @DeleteMapping("{id}")
     public DataResponse<EventResDto> deleteEventByCode(@Valid @PathVariable("id") String id) {
         eventService.deleteEventById(id);
