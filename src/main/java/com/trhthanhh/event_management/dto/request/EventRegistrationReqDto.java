@@ -9,9 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EventRegistrationReqDto {
-    @NotBlank(message = "User's ID is required")
-    private String userId;
-
     @NotBlank(message = "Event's ID is required")
     private String eventId;
 }

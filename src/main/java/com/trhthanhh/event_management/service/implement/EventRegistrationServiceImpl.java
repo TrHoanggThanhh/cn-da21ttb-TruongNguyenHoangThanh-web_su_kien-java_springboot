@@ -9,6 +9,7 @@ import com.trhthanhh.event_management.entity.EventRegistration;
 import com.trhthanhh.event_management.entity.User;
 import com.trhthanhh.event_management.enums.EventRegistrationStatus;
 import com.trhthanhh.event_management.exception.ResourceNotFoundException;
+import com.trhthanhh.event_management.exception.ScheduleConflictException;
 import com.trhthanhh.event_management.mapper.EventDtoMapper;
 import com.trhthanhh.event_management.mapper.EventRegistrationDtoMapper;
 import com.trhthanhh.event_management.repository.EventRegistrationRepository;
@@ -41,16 +42,31 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
 
     @Override
     public EventRegistrationResDto createEventRegistration(EventRegistrationReqDto eventRegistrationReqDto) {
-        final User existingUser = userRepository.findById(eventRegistrationReqDto.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("Cannot find user with id " + eventRegistrationReqDto.getUserId()));
+        // Lấy thông tin của User từ SecurityContextHolder
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        String username = principal.getUsername();
+
+        final User currentUser = userRepository.findByEmail(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find user with email" + username));
         final Event existingEvent = eventRepository.findById(eventRegistrationReqDto.getEventId())
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find event with id " + eventRegistrationReqDto.getEventId()));
         final EventRegistration eventRegistration = EventRegistration.builder()
-                .user(existingUser)
+                .user(currentUser)
                 .event(existingEvent)
                 .registrationDate(LocalDateTime.now())
                 .status(EventRegistrationStatus.CONFIRM)
                 .build();
+
+        // Kiểm tra trùng lịch
+        List<EventRegistration> existingEventRegistrations = eventRegistrationRepository.findByUser(currentUser);
+        for (EventRegistration item : existingEventRegistrations) {
+            LocalDateTime startDate = item.getEvent().getStartDate();
+            LocalDateTime endDate = item.getEvent().getEndDate();
+            if (startDate.isBefore(existingEvent.getEndDate()) && existingEvent.getStartDate().isBefore(endDate)) {
+                throw new ScheduleConflictException("User was registered an another Event");
+            }
+        }
         existingEvent.setQuantity(existingEvent.getQuantity() + 1);
         updateEventImportantBasedOnQuantity(existingEvent);
         eventRepository.save(existingEvent);
