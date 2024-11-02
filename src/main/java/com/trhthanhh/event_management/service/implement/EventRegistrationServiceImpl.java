@@ -8,6 +8,7 @@ import com.trhthanhh.event_management.entity.Event;
 import com.trhthanhh.event_management.entity.EventRegistration;
 import com.trhthanhh.event_management.entity.User;
 import com.trhthanhh.event_management.enums.EventRegistrationStatus;
+import com.trhthanhh.event_management.exception.EmailNotVerifiedException;
 import com.trhthanhh.event_management.exception.ResourceNotFoundException;
 import com.trhthanhh.event_management.exception.ScheduleConflictException;
 import com.trhthanhh.event_management.mapper.EventDtoMapper;
@@ -49,6 +50,11 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
 
         final User currentUser = userRepository.findByEmail(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find user with email" + username));
+
+        // Kiểm tra User đã vefiry Email hay chưa, chưa thì không cho đăng ký tham gia
+        if(!currentUser.isVerified()) {
+            throw new EmailNotVerifiedException("Please verify Email before register Event");
+        }
         final Event existingEvent = eventRepository.findById(eventRegistrationReqDto.getEventId())
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find event with id " + eventRegistrationReqDto.getEventId()));
         final EventRegistration eventRegistration = EventRegistration.builder()
