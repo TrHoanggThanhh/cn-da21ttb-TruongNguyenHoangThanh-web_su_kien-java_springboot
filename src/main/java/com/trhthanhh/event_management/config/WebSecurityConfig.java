@@ -61,7 +61,7 @@ public class WebSecurityConfig {
                     @Override
                     public void customize(CorsConfigurer<HttpSecurity> httpSecurityCorsConfigurer) {
                         CorsConfiguration config = new CorsConfiguration();
-                        config.setAllowedHeaders(List.of("*"));
+                        config.setAllowedOrigins(List.of("*"));
                         config.setAllowedMethods(List.of("*"));
                         config.setAllowedHeaders(List.of("*"));
                         config.setExposedHeaders(List.of("*"));
