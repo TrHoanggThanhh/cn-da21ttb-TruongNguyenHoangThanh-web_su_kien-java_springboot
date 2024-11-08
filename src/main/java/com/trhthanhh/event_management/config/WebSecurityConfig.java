@@ -62,9 +62,9 @@ public class WebSecurityConfig {
                     public void customize(CorsConfigurer<HttpSecurity> httpSecurityCorsConfigurer) {
                         CorsConfiguration config = new CorsConfiguration();
                         config.setAllowedHeaders(List.of("*"));
-                        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH"));
-                        config.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
-                        config.setExposedHeaders(List.of("x-auth-token"));
+                        config.setAllowedMethods(List.of("*"));
+                        config.setAllowedHeaders(List.of("*"));
+                        config.setExposedHeaders(List.of("*"));
                         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
                         source.registerCorsConfiguration("/**", config);
                         httpSecurityCorsConfigurer.configurationSource(source);

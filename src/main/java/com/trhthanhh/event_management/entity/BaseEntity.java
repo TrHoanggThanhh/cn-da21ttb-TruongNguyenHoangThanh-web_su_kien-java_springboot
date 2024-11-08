@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
-public class BaseEntity {
+public abstract class BaseEntity {
     @Column(name = "created_at")
     protected LocalDateTime createdAt;
 
