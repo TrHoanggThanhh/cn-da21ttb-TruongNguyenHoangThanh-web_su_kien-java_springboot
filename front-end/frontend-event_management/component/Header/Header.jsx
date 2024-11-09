@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';  // Import useNavigate từ react-router-dom
-import './navbar.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import './Header.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
-const Navbar = () => {
-  const [menu, setMenu] = useState('home');
-  const navigate = useNavigate();
+const Header = () => {
+  const [menu, setMenu] = useState('home')
+  const navigate = useNavigate()
 
   const handleMenuClick = (menuItem, path) => {
-    setMenu(menuItem);  // Đặt trạng thái menu được chọn
-    navigate(path);     // Điều hướng đến đường dẫn tương ứng
-  };
+    setMenu(menuItem)
+    navigate(path)
+  }
 
   return (
     <div className='navbar'>
@@ -29,7 +29,7 @@ const Navbar = () => {
             <button>Đăng nhập</button>
         </div>
     </div>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Header

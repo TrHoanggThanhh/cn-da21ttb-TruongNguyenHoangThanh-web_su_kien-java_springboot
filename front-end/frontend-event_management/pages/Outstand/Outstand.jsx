@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Outstand.css'; // Bạn có thể dùng CSS trang Home cho trang Outstand
+import './Outstand.css';
 
 const Outstand = () => {
   const [events, setEvents] = useState([]);

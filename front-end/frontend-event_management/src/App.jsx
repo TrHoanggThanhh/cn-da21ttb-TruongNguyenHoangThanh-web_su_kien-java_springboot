@@ -1,25 +1,24 @@
 import React from 'react';
-import Navbar from '../component/navbar/Navbar';
+import Header from '../component/Header/Header';
+import Footer from '../component/Footer/Footer';
 import { Routes, Route } from "react-router-dom";
-import Home from '../pages/homePage/Home';
-import Outstand from '../pages/eventOutstandPage/Outstand';
-import Club from '../pages/eventClubPage/club';
-import Tvu from '../pages/eventTVUPage/tvu';
-import Registry from '../pages/Registry/registry';
-import Login from '../pages/loginPage/login'; // Chú ý sửa tên component này thành chữ hoa đầu dòng
+import Home from '../pages/Home/Home';
+import Outstand from '../pages/Outstand/Outstand';
+import Club from '../pages/Club/Club';
+import School from '../pages/School/School';
+
 
 const App = () => {
   return (
     <div className='app'>
-      <Navbar />
+      <Header />
       <Routes>
         <Route path='/' element={<Home />} /> 
         <Route path='/outstand' element={<Outstand />} />
-        <Route path='/event-tvu' element={<Tvu />} />
+        <Route path='/event-tvu' element={<School />} />
         <Route path='/event-club' element={<Club />} />
-        <Route path='/login' element={<Login />} /> {/* Sửa tên thành Login */}
-        <Route path='/registry' element={<Registry />} />
       </Routes>
+      <Footer />
     </div>
   );
 };

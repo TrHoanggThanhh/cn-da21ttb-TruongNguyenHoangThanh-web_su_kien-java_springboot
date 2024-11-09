@@ -73,10 +73,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserResDto register(RegisterReqDto registerReqDto) throws MessagingException {
         if (userRepository.existsByEmail(registerReqDto.getEmail())) {
-                throw new DataAlreadyExistsException("Email already exist");
+            throw new DataAlreadyExistsException("Email already exist");
         }
         Role existingRole = roleRepository.findById(registerReqDto.getRoleId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
         if (existingRole.getName().toUpperCase().equals(Role.ADMIN)) {
             throw new PermissionDenyException("You cannot register an admin account");
         }
@@ -90,9 +90,10 @@ public class AuthServiceImpl implements AuthService {
                 .build();
         user.setVerificationCode(generateVerificationCode());
         user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(5));
-        user.setVerified(false);
+        user.setVerified(false);  // Đánh dấu là chưa xác thực
+
         // Gửi Email xác thực User
-        sendVerificationEmail(user);
+        sendVerificationEmail(user);  // Gửi email xác thực
         return new UserDtoMapper().apply(userRepository.save(user));
     }
 
@@ -105,7 +106,7 @@ public class AuthServiceImpl implements AuthService {
                 throw new VerificationCodeException("Verification code has expired");
             }
             if (user.getVerificationCode().equals(verifyReqDto.getVerificationCode())) {
-                user.setVerified(true);
+                user.setVerified(true);  // Đánh dấu tài khoản đã được xác thực
                 user.setVerificationCode(null);
                 user.setVerificationCodeExpiresAt(null);
                 userRepository.save(user);
