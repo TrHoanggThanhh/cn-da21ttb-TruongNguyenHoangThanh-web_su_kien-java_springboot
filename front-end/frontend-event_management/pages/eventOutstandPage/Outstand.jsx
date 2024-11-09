@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import './Home.css';
+import './Outstand.css'; // Bạn có thể dùng CSS trang Home cho trang Outstand
 
-const Home = () => {
+const Outstand = () => {
   const [events, setEvents] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize] = useState(9); 
+  const [pageSize] = useState(9);
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     fetch(`http://localhost:8080/api/v1/events?pageNumber=${pageNumber}&pageSize=${pageSize}`)
       .then((response) => response.json())
       .then((json) => {
-        setEvents(json.data.items);
-        setTotalPages(json.data.totalPages); 
+        // Lọc các sự kiện có quantity > 100
+        const filteredEvents = json.data.items.filter(event => event.quantity > 100);
+        setEvents(filteredEvents);
+        setTotalPages(Math.ceil(filteredEvents.length / pageSize)); // Cập nhật số trang
       })
       .catch((error) => {
         console.error(error);
       });
-  }, [pageNumber, pageSize]); 
+  }, [pageNumber, pageSize]);
 
   const handleNextPage = () => {
     if (pageNumber < totalPages) {
@@ -59,7 +61,7 @@ const Home = () => {
                 {getStatusLabel(event.status)}
               </p>
               <p className="event-date">
-                {new Date(event.startDate).toLocaleDateString()} - {new Date(event.endDate).toLocaleDateString()}
+                {new Date(event.startDate).toLocaleString()}
               </p>
             </div>
           </div>
@@ -79,4 +81,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Outstand;
