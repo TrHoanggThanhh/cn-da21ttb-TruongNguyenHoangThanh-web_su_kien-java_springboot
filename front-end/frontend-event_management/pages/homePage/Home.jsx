@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import './Home.css';
 
 const Home = () => {
@@ -6,6 +7,7 @@ const Home = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize] = useState(9); 
   const [totalPages, setTotalPages] = useState(1);
+  const navigate = useNavigate(); // Khai báo useNavigate
 
   useEffect(() => {
     fetch(`http://localhost:8080/api/v1/events?pageNumber=${pageNumber}&pageSize=${pageSize}`)
@@ -44,13 +46,22 @@ const Home = () => {
     }
   };
 
+  const handleEventClick = (eventId) => {
+    const token = localStorage.getItem('authToken'); // Kiểm tra xem người dùng đã đăng nhập chưa
+    if (!token) {
+      navigate('/login'); // Nếu chưa đăng nhập, chuyển hướng đến trang Login
+    } else {
+      navigate(`/event-register/${eventId}`); // Nếu đã đăng nhập, chuyển hướng đến trang đăng ký sự kiện
+    }
+  };
+
   return (
     <div className="events-container">
       {events.length === 0 ? (
         <p>No events available</p>
       ) : (
         events.map((event) => (
-          <div key={event.id} className="event-card">
+          <div key={event.id} className="event-card" onClick={() => handleEventClick(event.id)}>
             <img src={event.thumbnail} alt={event.name} className="event-thumbnail" />
             <div className="event-details">
               <h3 className="event-name">{event.name}</h3>
@@ -59,7 +70,6 @@ const Home = () => {
                 {getStatusLabel(event.status)}
               </p>
               <p className="event-date">
-                {/* Sử dụng toLocaleString để hiển thị cả ngày và giờ */}
                 {new Date(event.startDate).toLocaleString()}
               </p>
             </div>
