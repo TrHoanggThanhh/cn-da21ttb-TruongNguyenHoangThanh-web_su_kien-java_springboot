@@ -1,0 +1,26 @@
+.user-info-container {
+    padding: 20px;
+  }
+  
+  .user-info {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .user-info h2 {
+    text-align: center;
+  }
+  
+  .user-info p {
+    font-size: 1.1rem;
+    margin: 10px 0;
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+  

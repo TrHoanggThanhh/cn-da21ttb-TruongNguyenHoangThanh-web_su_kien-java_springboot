@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import './Home.css';
 
 const Home = () => {
@@ -7,7 +7,7 @@ const Home = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize] = useState(9); 
   const [totalPages, setTotalPages] = useState(1);
-  const navigate = useNavigate(); // Khai báo useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`http://localhost:8080/api/v1/events?pageNumber=${pageNumber}&pageSize=${pageSize}`)
@@ -47,11 +47,11 @@ const Home = () => {
   };
 
   const handleEventClick = (eventId) => {
-    const token = localStorage.getItem('authToken'); // Kiểm tra xem người dùng đã đăng nhập chưa
+    const token = localStorage.getItem('authToken'); 
     if (!token) {
-      navigate('/login'); // Nếu chưa đăng nhập, chuyển hướng đến trang Login
+      navigate('/login'); 
     } else {
-      navigate(`/event-register/${eventId}`); // Nếu đã đăng nhập, chuyển hướng đến trang đăng ký sự kiện
+      navigate(`/event-detail/${eventId}`);
     }
   };
 
