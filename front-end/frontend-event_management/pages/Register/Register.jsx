@@ -34,7 +34,7 @@ const Register = () => {
       .then((response) => response.json())
       .then((json) => {
         if (json.status === 0) {
-          navigate('/login'); // Điều hướng đến trang đăng nhập sau khi đăng ký thành công
+          navigate('/login');
         } else {
           setErrorMessage(json.message || 'Đăng ký thất bại');
         }

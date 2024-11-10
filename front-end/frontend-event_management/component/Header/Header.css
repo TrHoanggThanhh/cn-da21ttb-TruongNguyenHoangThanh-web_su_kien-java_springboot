@@ -1,12 +1,14 @@
+/* Navbar tổng thể */
 .navbar {
-    padding: 10px 0px;
+    padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative; /* Thêm position relative để dropdown không bị chồng lên */
 }
 
 .navbar .logo {
-    width: 10px;
+    width: 80px;
 }
 
 .navbar-menu {
@@ -17,39 +19,147 @@
     font-size: 20px;
 }
 
+.navbar-menu li {
+    cursor: pointer;
+    padding-bottom: 5px;
+    transition: all 0.3s ease;
+}
+
+.navbar-menu li:hover {
+    color: #007bff;
+    border-bottom: 2px solid #007bff;
+}
+
 .navbar-right {
     display: flex;
     align-items: center;
-    gap: 40px;
-}
-.search-icon {
-    font-size: 25px;
+    gap: 20px;
 }
 
+/* Tên và avatar người dùng */
+.navbar-user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    cursor: pointer;
+}
+
+.navbar-user-info span {
+    font-size: 16px;
+    font-weight: bold;
+    color: #49557e;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.avatar:hover {
+    transform: scale(1.1);
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    border-radius: 5px;
+    z-index: 100;
+}
+
+.dropdown-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 10px;
+}
+
+.dropdown-menu ul li {
+    padding: 12px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-menu ul li:hover {
+    background-color: #f0f0f0;
+}
+
+/* Cải thiện phần search icon và input */
+.navbar-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.search-input {
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    padding: 8px 15px;
+    font-size: 14px;
+    width: 180px;
+    transition: border 0.3s ease;
+    outline: none;
+    padding-right: 30px; /* Tạo không gian cho icon bên phải */
+}
+
+.search-input:focus {
+    border: 1px solid #49557e;
+}
+
+.navbar-search-icon {
+    position: absolute;
+    right: 10px; /* Đặt icon vào bên phải */
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Các nút đăng nhập và đăng ký */
 .navbar button {
     background-color: transparent;
     font-size: 16px;
     color: #49557e;
-    border: 1px solid tomato;
-    padding: 10px 30px;
-    border-radius: 50px;
+    border: 2px solid #49557e;
+    padding: 10px 20px;
+    border-radius: 25px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.3s ease;
+    font-weight: bold;
 }
 
 .navbar button:hover {
-    background-color: #bedb00;
+    background-color: #49557e;
+    color: #fff;
 }
 
-.navbar .active {
-    padding-bottom: 2px;
-    border-bottom: 2px solid;
+.navbar button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(73, 85, 126, 0.5);
 }
 
-.navbar li {
-    cursor: pointer;
+.navbar button.login {
+    border-color: #007bff;
+    color: #007bff;
 }
 
-.navbar-search-icon {
-    position: relative;
+.navbar button.login:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.navbar button.register {
+    border-color: #28a745;
+    color: #28a745;
+}
+
+.navbar button.register:hover {
+    background-color: #28a745;
+    color: #fff;
 }
