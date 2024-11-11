@@ -52,6 +52,29 @@ const Header = () => {
     };
   }, []);
 
+  // Hàm để xóa cookie
+  const deleteCookie = (cookieName) => {
+    document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  };
+
+  // Hàm xử lý đăng xuất
+  const handleLogout = () => {
+    // Xóa dữ liệu người dùng trong localStorage
+    localStorage.removeItem('fullName');
+    localStorage.removeItem('role');
+    localStorage.removeItem('authToken'); // Xóa token khỏi localStorage
+    
+    // Xóa cookie
+    deleteCookie('sessionToken'); // Xóa cookie tên là 'sessionToken', bạn có thể thay thế tên này nếu cần
+    deleteCookie('anotherCookie'); // Thêm bất kỳ cookie nào khác bạn muốn xóa
+
+    // Reload lại trang để làm mới giao diện
+    window.location.reload();
+
+    // Điều hướng về trang chủ (tùy chọn, nếu không dùng reload)
+    navigate('/');
+  };
+
   return (
     <div className='navbar'>
       <img src="https://www.tvu.edu.vn/wp-content/uploads/2018/10/logotvu.png" className="logo" alt="Logo" />
@@ -69,10 +92,9 @@ const Header = () => {
             {isDropdownOpen && (
               <div className="dropdown-menu">
                 <ul>
-                  <li onClick={() => handleMenuClick('account', '/account')}>Thông tin tài khoản</li>
-                  <li onClick={() => handleMenuClick('email-verification', '/email-verification')}>Xác thực Email</li>
+                  <li onClick={() => handleMenuClick('user-infor', '/user-info')}>Thông tin tài khoản</li>
                   <li onClick={() => handleMenuClick('my-events', '/my-events')}>Các sự kiện đã đăng kí</li>
-                  <li onClick={() => handleMenuClick('my-events', '/my-events')}>Đăng xuất</li>
+                  <li onClick={handleLogout}>Đăng xuất</li>
                 </ul>
               </div>
             )}

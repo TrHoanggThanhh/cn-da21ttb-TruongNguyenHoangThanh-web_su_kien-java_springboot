@@ -8,7 +8,9 @@ import Club from '../pages/Club/Club';
 import School from '../pages/School/School';
 import Register from '../pages/Register/Register';
 import UserInfo from '../pages/UserInfo/UserInfo';
-import Login from '../pages/Login/Login';
+//import VerifiEmail from '../pages/VerifiEmail/VerifiEmail';
+import Login from '../pages/Login/login'
+
 import Dashboard from '../pages/Dashboard/Dashboard';
 
 const App = () => {
@@ -26,6 +28,7 @@ const App = () => {
         <Route path='/event-tvu' element={<School />} />
         <Route path="/user-info" element={<UserInfo />} />
         <Route path='/event-club' element={<Club />} />
+        {/* //<Route path='/verifi-email' element={<VerifiEmail />} /> */}
         <Route path='/dashboard' element={<Dashboard />} />
       </Routes>
 
