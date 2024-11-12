@@ -46,10 +46,10 @@ public class AuthController {
         return new DataResponse<>(HttpStatus.OK.value(), "Verify Email successfully");
     }
 
-    @Operation(summary = "Gửi lại mã xác thực qua Email")
-    @PostMapping("/resendEmail")
+    @Operation(summary = "Gửi mã xác thực qua Email")
+    @PostMapping("/sendEmail")
     public DataResponse<?> resendEmail() throws MessagingException {
-        authService.resendEmail();
-        return new DataResponse<>(HttpStatus.OK.value(), "Resend Email successfully");
+        authService.sendEmail();
+        return new DataResponse<>(HttpStatus.OK.value(), "Send Email successfully");
     }
 }

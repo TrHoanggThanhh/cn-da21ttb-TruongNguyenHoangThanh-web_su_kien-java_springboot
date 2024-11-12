@@ -91,9 +91,6 @@ public class AuthServiceImpl implements AuthService {
         user.setVerificationCode(generateVerificationCode());
         user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(5));
         user.setVerified(false);  // Đánh dấu là chưa xác thực
-
-        // Gửi Email xác thực User
-        sendVerificationEmail(user);  // Gửi email xác thực
         return new UserDtoMapper().apply(userRepository.save(user));
     }
 
@@ -119,7 +116,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void resendEmail() throws MessagingException {
+    public void sendEmail() throws MessagingException {
         // Lấy thông tin của User từ SecurityContextHolder
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails principal = (UserDetails) authentication.getPrincipal();
