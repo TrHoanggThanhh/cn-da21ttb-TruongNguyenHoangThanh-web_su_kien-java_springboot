@@ -11,5 +11,5 @@ public interface AuthService {
     LoginResDto login(LoginReqDto loginReqDto);
     UserResDto register(RegisterReqDto registerReqDto) throws MessagingException;
     void verifyUser(VerifyReqDto verifyReqDto);
-    void resendEmail() throws MessagingException;
+    void sendEmail() throws MessagingException;
 }
