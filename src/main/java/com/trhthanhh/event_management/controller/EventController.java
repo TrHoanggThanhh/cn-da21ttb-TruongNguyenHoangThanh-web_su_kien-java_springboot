@@ -40,7 +40,7 @@ public class EventController {
         return new DataResponse<>(HttpStatus.OK.value(), "Get all events successfully", eventDtoPage);
     }
 
-    @Operation(summary = "Tìm kiếm sự sự kiện theo keyword, status, categoryId, startDate, endDate (phân trang)")
+    @Operation(summary = "Tìm kiếm sự kiện theo keyword, status, categoryId, startDate, endDate (phân trang)")
     @GetMapping("search")
     public DataResponse<PageDto<EventResDto>> searchEvents(
             @RequestParam(name = "keyword", required = false) String keyword,

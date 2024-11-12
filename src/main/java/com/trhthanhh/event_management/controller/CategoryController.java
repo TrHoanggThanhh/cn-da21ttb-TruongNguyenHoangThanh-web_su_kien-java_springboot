@@ -1,6 +1,7 @@
 package com.trhthanhh.event_management.controller;
 
 import com.trhthanhh.event_management.dto.DataResponse;
+import com.trhthanhh.event_management.dto.PageDto;
 import com.trhthanhh.event_management.dto.request.CategoryReqDto;
 import com.trhthanhh.event_management.dto.response.CategoryResDto;
 import com.trhthanhh.event_management.service.CategoryService;
@@ -30,6 +31,15 @@ public class CategoryController {
     public DataResponse<CategoryResDto> getCategoryById(@RequestParam("id") String id) {
         final CategoryResDto category = categoryService.getCategoryById(id);
         return new DataResponse<>(HttpStatus.OK.value(), "Get category with id " + id + " successfully", category);
+    }
+
+    @Operation(summary = "Tất cả danh muc (phân trang)")
+    @GetMapping
+    public DataResponse<PageDto<CategoryResDto>> getAllCategories(
+            @RequestParam(name = "pageNumber", required = false, defaultValue = "1") Integer pageNumber,
+            @RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
+        final PageDto<CategoryResDto> categoryDtoPage = categoryService.getAllCategories(pageNumber, pageSize);
+        return new DataResponse<>(HttpStatus.OK.value(), "Get all categories successfully", categoryDtoPage);
     }
 
     @Operation(summary = "Cập nhật danh mục")

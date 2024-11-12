@@ -1,5 +1,6 @@
 package com.trhthanhh.event_management.service.implement;
 
+import com.trhthanhh.event_management.dto.PageDto;
 import com.trhthanhh.event_management.dto.request.CategoryReqDto;
 import com.trhthanhh.event_management.dto.response.CategoryResDto;
 import com.trhthanhh.event_management.entity.Category;
@@ -8,6 +9,9 @@ import com.trhthanhh.event_management.mapper.CategoryDtoMapper;
 import com.trhthanhh.event_management.repository.CategoryRepository;
 import com.trhthanhh.event_management.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,5 +49,13 @@ public class CategoryServiceImpl implements CategoryService {
         final Category existingCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find category with id " + id));
         categoryRepository.delete(existingCategory);
+    }
+
+    @Override
+    public PageDto<CategoryResDto> getAllCategories(int pageNumber, int pageSize) {
+        pageNumber--;
+        final Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        final Page<Category> categoryPage = categoryRepository.findAll(pageable);
+        return PageDto.of(categoryPage).map(new CategoryDtoMapper());
     }
 }

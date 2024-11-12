@@ -2,10 +2,10 @@ server:
   port: 8080
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/event-management?useSSL=false&serverTimezone=Asia/Ho_Chi_Minh
+    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/event-management?useSSL=false&serverTimezone=Asia/Ho_Chi_Minh}
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: mysql
+    username: ${DBMS_USER:root}
+    password: ${DBMS_PASSWORD:mysql}
   jpa:
     show-sql: true
     hibernate:
