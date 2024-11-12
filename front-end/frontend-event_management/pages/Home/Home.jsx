@@ -106,29 +106,31 @@ const Home = () => {
   };
 
   return (
-    <div className="events-container">
-      {events.length === 0 ? (
-        <p>No events available</p>
-      ) : (
-        events.map((event) => (
-          <div key={event.id} className="event-card">
-            <img src={event.thumbnail} alt={event.name} className="event-thumbnail" />
-            <div className="event-details">
-              <h3 className="event-name">{event.name}</h3>
-              <p className="event-description">{event.description}</p>
-              <p className={`event-status ${event.status.toLowerCase()}`}>
-                {getStatusLabel(event.status)}
-              </p>
-              <p className="event-date">
-                {new Date(event.startDate).toLocaleString()}
-              </p>
-              <button onClick={() => handleRegisterEvent(event.id)} className="register-btn">
-                Đăng ký sự kiện
-              </button>
+    <div className="home-container">
+      <div className="events-container">
+        {events.length === 0 ? (
+          <p>No events available</p>
+        ) : (
+          events.map((event) => (
+            <div key={event.id} className="event-card">
+              <img src={event.thumbnail} alt={event.name} className="event-thumbnail" />
+              <div className="event-details">
+                <h3 className="event-name">{event.name}</h3>
+                <p className="event-description">{event.description}</p>
+                <p className={`event-status ${event.status.toLowerCase()}`}>
+                  {getStatusLabel(event.status)}
+                </p>
+                <p className="event-date">
+                  {new Date(event.startDate).toLocaleString()}
+                </p>
+                <button onClick={() => handleRegisterEvent(event.id)} className="register-btn">
+                  Đăng ký sự kiện
+                </button>
+              </div>
             </div>
-          </div>
-        ))
-      )}
+          ))
+        )}
+      </div>
 
       <div className="pagination">
         <button onClick={handlePreviousPage} disabled={pageNumber === 1}>

@@ -1,16 +1,23 @@
-/* Đặt footer ở cuối trang */
+/* Footer */
 .footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-    width: 100%;
-    font-size: 14px;
-    position: relative; /* Đặt vị trí footer theo nội dung */
-    bottom: 0;
-  }
-  
-  .footer p {
-    margin: 0;
-  }
-  
+  text-align: center; /* Căn giữa nội dung trong footer */
+  padding: 20px; /* Thêm khoảng cách padding cho footer */
+  background-color: #f8f9fa; /* Màu nền nhạt */
+  color: #333; /* Màu chữ đậm */
+  font-size: 0.9em; /* Kích thước chữ nhỏ hơn một chút */
+  border-top: 1px solid #ddd; /* Đường viền nhẹ ở trên cùng */
+  margin-top: auto; /* Đảm bảo footer luôn ở dưới cùng */
+}
+
+/* Thẻ <p> trong footer */
+.footer p {
+  margin: 0; /* Xóa margin mặc định của thẻ <p> */
+  font-family: 'Arial', sans-serif; /* Chọn font cho văn bản */
+  color: #555; /* Màu chữ nhạt hơn */
+}
+
+/* Hiệu ứng khi hover vào văn bản */
+.footer p:hover {
+  color: #007bff; /* Đổi màu chữ khi hover */
+  cursor: pointer; /* Thay đổi con trỏ khi hover */
+}

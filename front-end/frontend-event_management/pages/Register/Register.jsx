@@ -15,6 +15,12 @@ const Register = () => {
   const handleRegister = (e) => {
     e.preventDefault();
 
+    // Kiểm tra các trường bắt buộc có đầy đủ thông tin không
+    if (!email || !studentCode || !password || !firstName || !lastName) {
+      setErrorMessage('Vui lòng nhập đầy đủ các thông tin');
+      return;
+    }
+
     const requestBody = {
       email: email,
       studentCode: studentCode,

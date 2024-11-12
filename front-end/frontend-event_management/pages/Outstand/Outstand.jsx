@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import './Outstand.css';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const Outstand = () => {
   const [events, setEvents] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize] = useState(9);
   const [totalPages, setTotalPages] = useState(1);
+  const navigate = useNavigate(); // Initialize navigate
 
   useEffect(() => {
     fetch(`http://localhost:8080/api/v1/events?pageNumber=${pageNumber}&pageSize=${pageSize}`)
       .then((response) => response.json())
       .then((json) => {
-        // Lọc các sự kiện có quantity > 100
         const filteredEvents = json.data.items.filter(event => event.quantity > 100);
         setEvents(filteredEvents);
-        setTotalPages(Math.ceil(filteredEvents.length / pageSize)); // Cập nhật số trang
+        setTotalPages(Math.ceil(filteredEvents.length / pageSize));
       })
       .catch((error) => {
         console.error(error);
@@ -46,6 +47,37 @@ const Outstand = () => {
     }
   };
 
+  const handleRegisterEvent = (eventId) => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    fetch('http://localhost:8080/api/v1/event-registrations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ eventId }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === 0) {
+          alert('Đăng ký sự kiện thành công!');
+        } else if (data.status === 406) {
+          alert(data.message);
+        } else {
+          alert('Đăng ký thất bại!');
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        alert('Đăng ký thất bại!');
+      });
+  };
+
   return (
     <div className="events-container">
       {events.length === 0 ? (
@@ -60,9 +92,10 @@ const Outstand = () => {
               <p className={`event-status ${event.status.toLowerCase()}`}>
                 {getStatusLabel(event.status)}
               </p>
-              <p className="event-date">
-                {new Date(event.startDate).toLocaleString()}
-              </p>
+              <p className="event-date">{new Date(event.startDate).toLocaleString()}</p>
+              <button onClick={() => handleRegisterEvent(event.id)} className="register-btn">
+                Đăng ký sự kiện
+              </button>
             </div>
           </div>
         ))

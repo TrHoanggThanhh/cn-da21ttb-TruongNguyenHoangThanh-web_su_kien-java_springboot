@@ -163,3 +163,33 @@
     background-color: #28a745;
     color: #fff;
 }
+
+.navbar-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.search-input {
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    padding: 8px 15px;
+    font-size: 14px;
+    width: 180px;
+    transition: border 0.3s ease;
+    outline: none;
+    padding-right: 30px;
+}
+
+.search-input:focus {
+    border: 1px solid #49557e;
+}
+
+.navbar-search-icon {
+    position: absolute;
+    right: 10px;
+    padding: 7px 0px 0px 0px;
+    font-size: 20px;
+    cursor: pointer;
+}

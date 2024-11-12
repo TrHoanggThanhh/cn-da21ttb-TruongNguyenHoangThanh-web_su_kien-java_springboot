@@ -1,100 +1,141 @@
+/* Bao bọc toàn bộ các thẻ sự kiện */
 .events-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-    gap: 20px;
-    padding: 20px;
-  }
-  
-  .event-card {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .event-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
-  
-  .event-thumbnail {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-  }
-  
-  .event-details {
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .event-name {
-    font-size: 1.2em;
-    margin-bottom: 10px;
-    color: #333;
-  }
-  
-  .event-description {
-    font-size: 0.9em;
-    margin-bottom: 10px;
-    color: #666;
-  }
-  
-  .event-status {
-    font-weight: bold;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-  
-  .event-status.cancel {
-    color: red;
-  }
-  
-  .event-status.active {
-    color: green;
-  }
-  
-  .event-date {
-    font-size: 0.8em;
-    color: #888;
-  }
-  
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    gap: 10px;
-  }
-  
-  .pagination button {
-    padding: 8px 16px;
-    margin: 0 5px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .pagination button:hover {
-    background-color: #0056b3;
-  }
-  
-  .pagination button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  .pagination span {
-    font-size: 1rem;
-    color: #333;
-  }
-  
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; /* Giảm khoảng trống giữa các thẻ */
+  gap: 20px; /* Khoảng cách giữa các thẻ sự kiện */
+  padding-bottom: 50px; /* Thêm khoảng cách phía dưới để phân trang không bị dính */
+}
 
-  
+/* Thẻ sự kiện */
+.event-card {
+  width: 320px; /* Nới chiều rộng thẻ sự kiện */
+  height: auto; /* Chiều cao tự động */
+  max-height: 400px; /* Giới hạn chiều cao tối đa */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hình ảnh thumbnail của sự kiện */
+.event-thumbnail {
+  width: 100%;
+  height: 180px;
+  object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
+}
+
+/* Phần nội dung của thẻ sự kiện */
+.event-details {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+  overflow: hidden; /* Đảm bảo phần nội dung không tràn ra ngoài */
+}
+
+/* Tên sự kiện */
+.event-name {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+/* Mô tả sự kiện, giới hạn chiều cao */
+.event-description {
+  font-size: 0.9em;
+  color: #666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+
+  -webkit-box-orient: vertical;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+/* Trạng thái sự kiện */
+.event-status {
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+/* Các trạng thái sự kiện */
+.event-status.open {
+  color: green;
+}
+
+.event-status.close {
+  color: red;
+}
+
+.event-status.cancel {
+  color: orange;
+}
+
+/* Ngày giờ sự kiện */
+.event-date {
+  font-size: 0.8em;
+  color: #888;
+  margin-bottom: 15px;
+}
+
+/* Nút đăng ký sự kiện */
+.register-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+}
+
+.register-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Phân trang */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
+  padding-bottom: 20px;
+}
+
+.pagination button {
+  padding: 10px 20px;
+  margin: 0 5px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.pagination button:disabled {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-size: 1em;
+  margin: 0 10px;
+}
+
+/* Hiển thị khi không có sự kiện */
+.no-events {
+  text-align: center;
+  font-size: 1.2em;
+  color: #777;
+}

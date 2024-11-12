@@ -5,13 +5,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 const Header = () => {
-  const [menu, setMenu] = useState('home'); // Trạng thái của menu hiện tại
-  const [fullName, setFullName] = useState(''); // Lưu tên người dùng
-  const [role, setRole] = useState(''); // Lưu vai trò người dùng
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Trạng thái mở/đóng dropdown
+  const [menu, setMenu] = useState('home'); 
+  const [fullName, setFullName] = useState(''); 
+  const [role, setRole] = useState(''); 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(''); // Search query state
   const navigate = useNavigate();
 
-  // Lấy thông tin người dùng từ localStorage khi component được render
   useEffect(() => {
     const storedFullName = localStorage.getItem('fullName');
     const storedRole = localStorage.getItem('role');
@@ -21,23 +21,19 @@ const Header = () => {
     }
   }, []);
 
-  // Xử lý sự kiện khi nhấn vào các mục menu
   const handleMenuClick = (menuItem, path) => {
     setMenu(menuItem);
     navigate(path);
   };
 
-  // Toggle trạng thái dropdown
   const toggleDropdown = () => {
     setIsDropdownOpen(prevState => !prevState);
   };
 
-  // Đóng dropdown khi người dùng click ra ngoài
   const closeDropdown = () => {
     setIsDropdownOpen(false);
   };
 
-  // Thêm sự kiện để đóng dropdown khi người dùng click ra ngoài
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest('.navbar-user-info')) {
@@ -52,27 +48,26 @@ const Header = () => {
     };
   }, []);
 
-  // Hàm để xóa cookie
   const deleteCookie = (cookieName) => {
     document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
   };
 
-  // Hàm xử lý đăng xuất
   const handleLogout = () => {
-    // Xóa dữ liệu người dùng trong localStorage
     localStorage.removeItem('fullName');
     localStorage.removeItem('role');
-    localStorage.removeItem('authToken'); // Xóa token khỏi localStorage
-    
-    // Xóa cookie
-    deleteCookie('sessionToken'); // Xóa cookie tên là 'sessionToken', bạn có thể thay thế tên này nếu cần
-    deleteCookie('anotherCookie'); // Thêm bất kỳ cookie nào khác bạn muốn xóa
-
-    // Reload lại trang để làm mới giao diện
+    localStorage.removeItem('authToken');
+    deleteCookie('sessionToken');
+    deleteCookie('anotherCookie');
     window.location.reload();
-
-    // Điều hướng về trang chủ (tùy chọn, nếu không dùng reload)
     navigate('/');
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    // Redirect to Search page with query
+    if (searchQuery.trim()) {
+      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+    }
   };
 
   return (
@@ -85,6 +80,18 @@ const Header = () => {
         <li onClick={() => handleMenuClick('clb', '/event-club')} className={menu === 'clb' ? 'active' : ''}>Sự kiện CLB</li>
       </ul>
       <div className="navbar-right">
+        <div className="navbar-search">
+          <form onSubmit={handleSearch}>
+            <input 
+              type="text" 
+              className="search-input" 
+              placeholder="Tìm kiếm sự kiện" 
+              value={searchQuery} 
+              onChange={(e) => setSearchQuery(e.target.value)} 
+            />
+            <FontAwesomeIcon icon={faMagnifyingGlass} className="navbar-search-icon" onClick={handleSearch} />
+          </form>
+        </div>
         {fullName ? (
           <div className="navbar-user-info" onClick={toggleDropdown}>
             <span>{fullName}</span>
@@ -93,7 +100,7 @@ const Header = () => {
               <div className="dropdown-menu">
                 <ul>
                   <li onClick={() => handleMenuClick('user-infor', '/user-info')}>Thông tin tài khoản</li>
-                  <li onClick={() => handleMenuClick('my-events', '/my-events')}>Các sự kiện đã đăng kí</li>
+                  <li onClick={() => handleMenuClick('my-events', '/my-event')}>Các sự kiện đã đăng kí</li>
                   <li onClick={handleLogout}>Đăng xuất</li>
                 </ul>
               </div>

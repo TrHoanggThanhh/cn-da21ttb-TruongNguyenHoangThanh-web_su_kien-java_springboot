@@ -1,0 +1,35 @@
+.create-event-container,
+.update-event-container,
+.delete-event-container,
+.events-container {
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 600px;
+  text-align: center;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
