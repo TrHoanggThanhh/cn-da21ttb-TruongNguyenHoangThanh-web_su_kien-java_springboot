@@ -8,7 +8,9 @@ import com.trhthanhh.event_management.entity.Event;
 import com.trhthanhh.event_management.entity.EventRegistration;
 import com.trhthanhh.event_management.entity.User;
 import com.trhthanhh.event_management.enums.EventRegistrationStatus;
+import com.trhthanhh.event_management.enums.EventStatus;
 import com.trhthanhh.event_management.exception.EmailNotVerifiedException;
+import com.trhthanhh.event_management.exception.EventNotAvailableException;
 import com.trhthanhh.event_management.exception.ResourceNotFoundException;
 import com.trhthanhh.event_management.exception.ScheduleConflictException;
 import com.trhthanhh.event_management.mapper.EventDtoMapper;
@@ -55,8 +57,14 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
         if(!currentUser.isVerified()) {
             throw new EmailNotVerifiedException("Please verify Email before register Event");
         }
+
+        // Kiếm tra Event có tồn tại không và trạng thái Event phải CANCELLED không
         final Event existingEvent = eventRepository.findById(eventRegistrationReqDto.getEventId())
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find event with id " + eventRegistrationReqDto.getEventId()));
+        if (existingEvent.getStatus().equals(EventStatus.CANCEL)) {
+            throw new EventNotAvailableException("Event has been cancelled and cannot be registered for");
+        }
+
         final EventRegistration eventRegistration = EventRegistration.builder()
                 .user(currentUser)
                 .event(existingEvent)
@@ -70,7 +78,7 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
             LocalDateTime startDate = item.getEvent().getStartDate();
             LocalDateTime endDate = item.getEvent().getEndDate();
             if (startDate.isBefore(existingEvent.getEndDate()) && existingEvent.getStartDate().isBefore(endDate)) {
-                throw new ScheduleConflictException("User was registered an another Event");
+                throw new ScheduleConflictException("User was registered an another Event at this time");
             }
         }
         existingEvent.setQuantity(existingEvent.getQuantity() + 1);
