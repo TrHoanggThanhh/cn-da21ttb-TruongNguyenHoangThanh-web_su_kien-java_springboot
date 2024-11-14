@@ -58,11 +58,14 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
             throw new EmailNotVerifiedException("Please verify Email before register Event");
         }
 
-        // Kiếm tra Event có tồn tại không và trạng thái Event phải CANCELLED không
+        // Kiếm tra Event có tồn tại không và trạng thái Event phải CANCELLED, CLOSED không
         final Event existingEvent = eventRepository.findById(eventRegistrationReqDto.getEventId())
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find event with id " + eventRegistrationReqDto.getEventId()));
         if (existingEvent.getStatus().equals(EventStatus.CANCEL)) {
             throw new EventNotAvailableException("Event has been cancelled and cannot be registered for");
+        }
+        if (existingEvent.getStatus().equals(EventStatus.CLOSE)) {
+            throw new EventNotAvailableException("Event has been closed and cannot be registered for");
         }
 
         final EventRegistration eventRegistration = EventRegistration.builder()
@@ -75,10 +78,12 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
         // Kiểm tra trùng lịch
         List<EventRegistration> existingEventRegistrations = eventRegistrationRepository.findByUser(currentUser);
         for (EventRegistration item : existingEventRegistrations) {
-            LocalDateTime startDate = item.getEvent().getStartDate();
-            LocalDateTime endDate = item.getEvent().getEndDate();
-            if (startDate.isBefore(existingEvent.getEndDate()) && existingEvent.getStartDate().isBefore(endDate)) {
-                throw new ScheduleConflictException("User was registered an another Event at this time");
+            if (item.getStatus().equals(EventRegistrationStatus.CONFIRM)) {
+                final LocalDateTime startDate = item.getEvent().getStartDate();
+                final LocalDateTime endDate = item.getEvent().getEndDate();
+                if (startDate.isBefore(existingEvent.getEndDate()) && existingEvent.getStartDate().isBefore(endDate)) {
+                    throw new ScheduleConflictException("User was registered an another Event at this time");
+                }
             }
         }
         existingEvent.setQuantity(existingEvent.getQuantity() + 1);
@@ -119,13 +124,15 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
     public void deleteEventRegistration(String id) {
         final EventRegistration existingEventRegistration = eventRegistrationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find event registration with id " + id));
-        existingEventRegistration.setStatus(EventRegistrationStatus.CANCEL);
-        final Event existingEvent = eventRegistrationRepository.findEventByEventRegistrationId(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Cannot find event  with id " + id));
-        existingEvent.setQuantity(existingEvent.getQuantity() - 1);
-        updateEventImportantBasedOnQuantity(existingEvent);
-        eventRepository.save(existingEvent);
-        eventRegistrationRepository.save(existingEventRegistration);
+        if (!existingEventRegistration.getStatus().equals(EventRegistrationStatus.CANCEL)) {
+            existingEventRegistration.setStatus(EventRegistrationStatus.CANCEL);
+            final Event existingEvent = eventRegistrationRepository.findEventByEventRegistrationId(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Cannot find event  with id " + id));
+            existingEvent.setQuantity(existingEvent.getQuantity() - 1);
+            updateEventImportantBasedOnQuantity(existingEvent);
+            eventRepository.save(existingEvent);
+            eventRegistrationRepository.save(existingEventRegistration);
+        }
     }
 
     private void updateEventImportantBasedOnQuantity(Event event) {
