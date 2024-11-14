@@ -1,75 +1,76 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './Home.css';
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import './Home.css'
 
 const Home = () => {
-  const [events, setEvents] = useState([]);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize] = useState(9); 
-  const [totalPages, setTotalPages] = useState(1);
-  const [successMessage, setSuccessMessage] = useState(''); // Thông báo thành công
-  const [errorMessage, setErrorMessage] = useState(''); // Thông báo lỗi xác thực email
-  const navigate = useNavigate();
+  const [events, setEvents] = useState([])
+  const [pageNumber, setPageNumber] = useState(1)
+  const [pageSize] = useState(9)
+  const [totalPages, setTotalPages] = useState(1)
+  const [successMessage, setSuccessMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+  const [isModalOpen, setIsModalOpen] = useState(false) // To control modal visibility
+  const [modalMessage, setModalMessage] = useState('') // Message to show in modal
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetch(`http://localhost:8080/api/v1/events?pageNumber=${pageNumber}&pageSize=${pageSize}`)
       .then((response) => response.json())
       .then((json) => {
-        setEvents(json.data.items);
-        setTotalPages(json.data.totalPages); 
+        setEvents(json.data.items)
+        setTotalPages(json.data.totalPages)
       })
       .catch((error) => {
-        console.error(error);
-      });
-  }, [pageNumber, pageSize]);
+        console.error(error)
+      })
+  }, [pageNumber, pageSize])
 
   const handleNextPage = () => {
     if (pageNumber < totalPages) {
-      setPageNumber(pageNumber + 1);
+      setPageNumber(pageNumber + 1)
     }
-  };
+  }
 
   const handlePreviousPage = () => {
     if (pageNumber > 1) {
-      setPageNumber(pageNumber - 1);
+      setPageNumber(pageNumber - 1)
     }
-  };
+  }
 
   const getStatusLabel = (status) => {
     switch (status) {
       case 'OPEN':
-        return 'Sắp diễn ra';
+        return 'Sắp diễn ra'
       case 'CLOSE':
-        return 'Đã kết thúc';
+        return 'Đã kết thúc'
       case 'CANCEL':
-        return 'Đã hủy';
+        return 'Đã hủy'
       default:
-        return 'Không xác định';
+        return 'Không xác định'
     }
-  };
+  }
 
   const handleEventClick = (eventId) => {
-    const token = localStorage.getItem('authToken'); 
+    const token = localStorage.getItem('authToken')
     if (!token) {
-      navigate('/login'); 
+      navigate('/login')
     } else {
-      navigate(`/event-detail/${eventId}`);
+      navigate(`/event-detail/${eventId}`)
     }
-  };
+  }
 
   const handleRegisterEvent = (eventId) => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('authToken')
     if (!token) {
-      navigate('/login');
-      return;
+      navigate('/login')
+      return
     }
 
-    // Gửi yêu cầu đăng ký sự kiện
     fetch('http://localhost:8080/api/v1/event-registrations', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`, // Đính kèm token Bearer
+        'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify({
         eventId: eventId,
@@ -77,33 +78,27 @@ const Home = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.status === 0) {
-          // Đăng ký thành công
-          setSuccessMessage('Đăng ký thành công!');
-          setErrorMessage(''); // Đảm bảo không hiển thị lỗi
-          alert('Đăng ký sự kiện thành công!');
-        } else if (data.status === 406) {
-          // Yêu cầu xác thực email
-          setErrorMessage(data.message); // Lưu thông báo lỗi
-          setSuccessMessage(''); // Đảm bảo không hiển thị thành công
-          alert(data.message); // Hiển thị thông báo yêu cầu xác thực
+        if (data.status === 200) {
+          setModalMessage('Đăng ký sự kiện thành công!')
         } else {
-          setSuccessMessage('Đăng ký thất bại!');
-          setErrorMessage(''); // Đảm bảo không hiển thị lỗi
-          alert('Đăng ký sự kiện Thành công!');
+          setModalMessage(data.message)
         }
+        setIsModalOpen(true) // Open the modal after response
       })
       .catch((error) => {
-        console.error(error);
-        setSuccessMessage('Đăng ký thất bại!');
-        setErrorMessage(''); // Đảm bảo không hiển thị lỗi
-        alert('Đăng ký sự kiện thành công!');
-      });
-  };
+        console.error(error)
+        setModalMessage('Đăng ký sự kiện thất bại!')
+        setIsModalOpen(true) // Open the modal after error
+      })
+  }
 
   const handleVerifyEmail = () => {
-    navigate('/user-info'); // Chuyển hướng tới trang xác thực email
-  };
+    navigate('/user-info')
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
 
   return (
     <div className="home-container">
@@ -123,6 +118,8 @@ const Home = () => {
                 <p className="event-date">
                   {new Date(event.startDate).toLocaleString()}
                 </p>
+                <p className="event-location">Location: {event.location}</p>
+                <p className="event-quantity">Quantity: {event.quantity}</p>
                 <button onClick={() => handleRegisterEvent(event.id)} className="register-btn">
                   Đăng ký sự kiện
                 </button>
@@ -136,13 +133,27 @@ const Home = () => {
         <button onClick={handlePreviousPage} disabled={pageNumber === 1}>
           Trang trước
         </button>
-        <span>Page {pageNumber} of {totalPages}</span>
+        <span>
+          Page {pageNumber} of {totalPages}
+        </span>
         <button onClick={handleNextPage} disabled={pageNumber === totalPages}>
           Tiếp
         </button>
       </div>
-    </div>
-  );
-};
 
-export default Home;
+      {/* Modal Popup for displaying messages */}
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <p>{modalMessage}</p>
+            <button onClick={closeModal} className="modal-close-btn">
+              Đóng
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default Home
