@@ -1,26 +1,107 @@
 .user-info-container {
-    padding: 20px;
-  }
-  
-  .user-info {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .user-info h2 {
-    text-align: center;
-  }
-  
-  .user-info p {
-    font-size: 1.1rem;
-    margin: 10px 0;
-  }
-  
-  .error-message {
-    color: red;
-    font-size: 1rem;
-    margin-bottom: 10px;
-  }
-  
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.user-info {
+  background-color: #f9f9f9;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.user-info h2 {
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+.user-info p {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.user-info p strong {
+  color: #555;
+}
+
+.user-info p .verified {
+  color: #4CAF50; 
+  font-weight: bold;
+}
+
+.user-info p .not-verified {
+  color: #f44336; 
+  font-weight: bold;
+}
+
+.error-message {
+  color: #f44336;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:disabled {
+  background-color: #bdbdbd;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background-color: #1976D2;
+}
+
+input {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+  margin-top: 10px;
+  width: calc(100% - 30px);
+}
+
+input:focus {
+  border-color: #2196F3;
+  outline: none;
+}
+
+.verification-container {
+  margin-top: 20px;
+}
+
+.verification-container input {
+  width: auto;
+  max-width: 200px;
+}
+
+.verification-container button {
+  margin-top: 10px;
+}
+
+.verification-container p {
+  color: #4CAF50; 
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.not-verified p {
+  color: #f44336;
+}
+
+.btn-ok {
+  padding: 5px;
+}

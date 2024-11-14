@@ -18,7 +18,7 @@ const VerifiEmail = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:8080/api/v1/auth/resendEmail', {
+      const response = await fetch('http://localhost:8080/api/v1/auth/sendEmail', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
