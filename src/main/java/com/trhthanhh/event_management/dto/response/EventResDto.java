@@ -20,7 +20,8 @@ public class EventResDto {
     private EventStatus status;
     private String thumbnail;
     private String categoryName;
-    private int quantity;
+    private int maxParticipants;
+    private int currentParticipants;
     private boolean isImportant;
 
     @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")

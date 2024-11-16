@@ -48,6 +48,8 @@ public class EventServiceImpl implements EventService {
                 .organizer(eventReqDto.getOrganizer())
                 .status(eventReqDto.getStatus())
                 .category(existingCategory)
+                .maxParticipants(eventReqDto.getMaxParticipants())
+                .isImportant(false)
                 .startDate(eventReqDto.getStartDate())
                 .endDate(eventReqDto.getEndDate())
                 .build();
@@ -91,7 +93,8 @@ public class EventServiceImpl implements EventService {
         existingEvent.setLocation(eventReqDto.getLocation());
         existingEvent.setOrganizer(existingEvent.getOrganizer());
         existingEvent.setStatus(eventReqDto.getStatus());
-        existingEvent.setQuantity(existingEvent.getQuantity());
+        existingEvent.setMaxParticipants(existingEvent.getMaxParticipants());
+        existingEvent.setCurrentParticipants(0);
         existingEvent.setImportant(existingEvent.isImportant());
         existingEvent.setCategory(existingCategory);
         existingEvent.setStartDate(eventReqDto.getStartDate());

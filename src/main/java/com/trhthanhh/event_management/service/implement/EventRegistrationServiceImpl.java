@@ -40,8 +40,8 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
 
-    @Value("${resource.suitableQuantity}")
-    private int suitableQuantity;
+    @Value("${resource.suitablePercent}")
+    private int suitablePercent;
 
     @Override
     public EventRegistrationResDto createEventRegistration(EventRegistrationReqDto eventRegistrationReqDto) {
@@ -58,14 +58,21 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
             throw new EmailNotVerifiedException("Please verify Email before register Event");
         }
 
-        // Kiếm tra Event có tồn tại không và trạng thái Event phải CANCELLED, CLOSED không
+        // Kiếm tra Event có tồn tại không trạng thái Event phải CANCELLED, CLOSED không
         final Event existingEvent = eventRepository.findById(eventRegistrationReqDto.getEventId())
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find event with id " + eventRegistrationReqDto.getEventId()));
+
+        // Kiểm tra trạng thái Event phải CANCELLED, CLOSED không
         if (existingEvent.getStatus().equals(EventStatus.CANCEL)) {
             throw new EventNotAvailableException("Event has been cancelled and cannot be registered for");
         }
         if (existingEvent.getStatus().equals(EventStatus.CLOSE)) {
             throw new EventNotAvailableException("Event has been closed and cannot be registered for");
+        }
+
+        // Kiểm tra còn chỗ để đăng ký không
+        if (existingEvent.getCurrentParticipants() == existingEvent.getMaxParticipants()) {
+            throw new EventNotAvailableException("This event has reached its maximum capacity");
         }
 
         final EventRegistration eventRegistration = EventRegistration.builder()
@@ -86,7 +93,7 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
                 }
             }
         }
-        existingEvent.setQuantity(existingEvent.getQuantity() + 1);
+        existingEvent.setCurrentParticipants(existingEvent.getCurrentParticipants() + 1);
         updateEventImportantBasedOnQuantity(existingEvent);
         eventRepository.save(existingEvent);
         return new EventRegistrationDtoMapper().apply(eventRegistrationRepository.save(eventRegistration));
@@ -128,7 +135,7 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
             existingEventRegistration.setStatus(EventRegistrationStatus.CANCEL);
             final Event existingEvent = eventRegistrationRepository.findEventByEventRegistrationId(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Cannot find event  with id " + id));
-            existingEvent.setQuantity(existingEvent.getQuantity() - 1);
+            existingEvent.setCurrentParticipants(existingEvent.getCurrentParticipants() - 1);
             updateEventImportantBasedOnQuantity(existingEvent);
             eventRepository.save(existingEvent);
             eventRegistrationRepository.save(existingEventRegistration);
@@ -136,6 +143,6 @@ public class EventRegistrationServiceImpl implements EventRegistrationService {
     }
 
     private void updateEventImportantBasedOnQuantity(Event event) {
-        event.setImportant(event.getQuantity() >= suitableQuantity);
+        event.setImportant(event.getCurrentParticipants() >= (suitablePercent / 100) * event.getMaxParticipants());
     }
 }

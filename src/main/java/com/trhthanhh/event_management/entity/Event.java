@@ -43,11 +43,14 @@ public class Event extends BaseEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column(name = "quantity")
-    private int quantity = 0;
+    @Column(name = "max_participants")
+    private int maxParticipants;
+
+    @Column(name = "current_participants")
+    private int currentParticipants;
 
     @Column(name = "is_important")
-    private boolean isImportant = false;
+    private boolean isImportant;
 
     @Column(name = "start_date")
     private LocalDateTime startDate;

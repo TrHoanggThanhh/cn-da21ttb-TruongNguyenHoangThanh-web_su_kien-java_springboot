@@ -33,7 +33,7 @@ spring:
 api:
   prefix: api/v1
 resource:
-  suitableQuantity: 300
+  suitablePercent: 60
   noImageUrl: https://res.cloudinary.com/dcw5wq1ka/image/upload/v1729736990/no-image-found.png
   logoImageUrl: https://www.tvu.edu.vn/wp-content/uploads/2018/10/logotvu.png
 cloudinary:
